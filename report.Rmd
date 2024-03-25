@@ -1,0 +1,63 @@
+---
+title: 'DATA 550: Final Project'
+author: "Katelyn Chiang"
+date: "Last updated: `r format(Sys.Date(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set (echo=FALSE, warning=FALSE, message=FALSE, error=FALSE)
+```
+
+```{r here-i-am}
+here::i_am("report.Rmd")
+```
+
+## Introduction 
+
+**Data description:** 
+
+For the final project, I will be using a synthetic dataset that is modeled after electronic health record data of children and adolescents aged 2-19 years attending well-child visits at a local pediatric primary care clinic. This dataset includes data from 40,000 different patient encounters between 2016-2023 (5,000 visits each year). Variables included in the dataset include the child/adolescent's age (categorized across 3 different age groups, `Age_Group`: `2-5 years`, `6-11 years`, and `2-19 years`), sex (`Sex`: `Male` or `Female`), race/ethnicity (`Race_Ethnicity`: `Hispanic`,  `White`, and `Black`), insurance (`Insurance`: `Medicaid` or `Commercial`), and weight status (categorized across 4 different weight groups based on the child's BMI-for-age percentile data (not included), `Weight_Status`: `Underweight`, `Healthy Weight`, `Overweight`, and `Obesity`). Another variable `Year` identifies the year of the patient encounter. 
+
+**Analysis objectives:**
+
+* Objective 1: To determine trends in prevalence of obesity among patients attending well-child visits at a local pediatric primary care clinic from 2016 to 2023. 
+* Objective 2: To assess prevalence of obesity among patients attending well-child visits at a local pediatric primary care clinic by various sociodemographic characteristics. 
+
+## Methods
+
+First, various necessary packages needed for the analysis will be loaded. 
+
+```{r package-loading, echo=TRUE}
+pacman::p_load(tidyverse, dplyr, gtsummary, ggplot2, gt, readxl, data.table, ggrepel, knitr, yaml, rmarkdown, here)
+```
+
+Second, the synthetic dataset will be loaded from my local directory (OneDrive). The data will be called `clinic`. 
+
+```{r data-loading, echo=TRUE}
+clinic <- read_csv(file = here::here("Data/synthetic_data.csv"))
+```
+
+## Results
+
+### Table 1
+
+To begin examining Objective 2, I will create a table (using the tbl_summary function from the gt package) that displays the weight status makeup of various sociodemographic groups in the patient population. For simplicity, I will only examine the most recent data (2023). 
+
+```{r table1}
+readRDS(file = here::here("Output/Table1.rds"))
+```
+
+
+This table displays the number (and row percents) of patients in each weight status category in various sociodemographic groups. For example, 27.6% of Hispanic children and adolescents have obesity compared to 16.2% of White children and adolescents. In the Local Pediatric Primary Care Clinic, it appears that obesity is more prevalent among adolescents (29.2%) and school-age children (24.9%) compared to young children (13.8%). Obesity prevalence also appears to be highest among Hispanic children and adolescents (27.6%), followed by Black children and adolescents (20.5%), and lowest among White children and adolescents (16.2%). These results suggest there may be no differences in obesity prevalence by sex and insurance type. 
+
+### Figure 1 
+
+To begin examining Objective 1, I will create a figure (using the ggplot package) that displays the prevalence of obesity in the clinic for each year 2016-2023.
+
+```{r Figure1}
+readRDS(file = here::here("Output/Figure1.rds"))
+```
+
+
+This figure displays the prevalence of obesity in the Local Pediatric Primary Care Clinic for each year between 2016 and 2023. It appears that obesity prevalence was fairly consistent before 2020 (even decreasing to 17.9%) before increasing during the beginning of the COVID-19 pandemic. Obesity prevalence appears to have peaked in this population in 2021 (23.9%) and has steadily been declining since 2021. As of 2023, obesity prevalence was 21.0%. 
